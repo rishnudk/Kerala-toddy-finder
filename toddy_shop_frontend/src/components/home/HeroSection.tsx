@@ -147,15 +147,12 @@ export function HeroSection() {
         aria-label="Scroll to next section"
         className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] flex flex-col items-center gap-1 group cursor-pointer transition-all duration-500 ${showArrow ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}
       >
-        <span className="text-[11px] font-bold tracking-[3px] uppercase text-white/60 group-hover:text-white/90 transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+        <span className="text-[11px] font-bold tracking-[3px] uppercase text-white/50 group-hover:text-white/80 transition-colors">
           Explore
         </span>
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-sm scale-[2.2]" />
-          <span className="hero-scroll-arrow material-symbols-outlined text-[36px] text-[#ffb148] group-hover:text-white transition-colors relative drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-            expand_more
-          </span>
-        </div>
+        <span className="hero-scroll-arrow material-symbols-outlined text-[32px] text-[#ffb148] group-hover:text-white transition-colors">
+          expand_more
+        </span>
       </button>
     </section>
   );
