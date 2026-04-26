@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema
 
 from core.models import Status
 from shared.permissions import IsAdmin, IsShopOwner, IsShopOwnerOrAdmin
@@ -31,8 +32,8 @@ from .serializers import (
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ToddyShopViewSet(viewsets.ModelViewSet):
-
     def get_queryset(self):
         qs = ToddyShop.objects.select_related(
             "place__district", "category", "status", "owner__role"
@@ -144,8 +145,8 @@ class ToddyShopViewSet(viewsets.ModelViewSet):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ShopLicenseView(APIView):
-
     def get_permissions(self):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
@@ -192,8 +193,8 @@ class ShopLicenseView(APIView):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ShopFoodItemView(APIView):
-
     def get_permissions(self):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
@@ -231,6 +232,7 @@ class ShopFoodItemView(APIView):
         return APIResponse(data=serializer.data, message="Food item added.", status=201)
 
 
+@extend_schema(tags=["Shops"])
 class ShopFoodItemDetailView(APIView):
     permission_classes = [IsShopOwnerOrAdmin]
 
@@ -271,8 +273,8 @@ class ShopFoodItemDetailView(APIView):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ShopMediaView(APIView):
-
     def get_permissions(self):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
@@ -308,6 +310,7 @@ class ShopMediaView(APIView):
         return APIResponse(data=serializer.data, message="Media uploaded.", status=201)
 
 
+@extend_schema(tags=["Shops"])
 class ShopMediaDetailView(APIView):
     permission_classes = [IsShopOwnerOrAdmin]
 
@@ -330,8 +333,8 @@ class ShopMediaDetailView(APIView):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ShopReviewView(APIView):
-
     def get_permissions(self):
         if self.request.method == "GET":
             return [permissions.AllowAny()]
@@ -369,6 +372,7 @@ class ShopReviewView(APIView):
         )
 
 
+@extend_schema(tags=["Shops"])
 class ShopReviewDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -416,8 +420,8 @@ class ShopReviewDetailView(APIView):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Shops"])
 class ShopRatingView(APIView):
-
     def get_permissions(self):
         if self.request.method == "GET":
             return [permissions.AllowAny()]

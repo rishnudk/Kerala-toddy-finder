@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions, viewsets
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.utils import extend_schema
 
 from shared.permissions import IsAdminOrReadOnly
 from shared.responses import APIResponse
@@ -43,6 +44,7 @@ from .serializers import (
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Authentication"])
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
@@ -58,6 +60,7 @@ class RegisterView(generics.CreateAPIView):
         )
 
 
+@extend_schema(tags=["Authentication"])
 class LoginView(TokenObtainPairView):
     """Returns JWT access + refresh tokens."""
 
@@ -70,6 +73,7 @@ class LoginView(TokenObtainPairView):
         return APIResponse(data=serializer.validated_data, message="Login successful.")
 
 
+@extend_schema(tags=["Authentication"])
 class TokenRefreshAPIView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -80,6 +84,7 @@ class TokenRefreshAPIView(TokenRefreshView):
         return APIResponse(data=serializer.validated_data, message="Token refreshed.")
 
 
+@extend_schema(tags=["Authentication"])
 class MeView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -97,6 +102,7 @@ class MeView(generics.RetrieveAPIView):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Lookups"])
 class LookupViewSet(viewsets.ModelViewSet):
     """Read-only for everyone; full CRUD for admins."""
 
@@ -136,68 +142,81 @@ class LookupViewSet(viewsets.ModelViewSet):
 # ---------------------------------------------------------------------------
 
 
+@extend_schema(tags=["Lookups"])
 class UserRoleViewSet(LookupViewSet):
     queryset = UserRole.objects.all()
     serializer_class = UserRoleSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class StatusViewSet(LookupViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class DistrictViewSet(LookupViewSet):
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class PlaceViewSet(LookupViewSet):
     queryset = Place.objects.select_related("district").all()
     serializer_class = PlaceSerializer
     filterset_fields = ["district"]
 
 
+@extend_schema(tags=["Lookups"])
 class ShopCategoryViewSet(LookupViewSet):
     queryset = ShopCategory.objects.all()
     serializer_class = ShopCategorySerializer
 
 
+@extend_schema(tags=["Lookups"])
 class FoodCategoryViewSet(LookupViewSet):
     queryset = FoodCategory.objects.all()
     serializer_class = FoodCategorySerializer
 
 
+@extend_schema(tags=["Lookups"])
 class FoodItemViewSet(LookupViewSet):
     queryset = FoodItem.objects.select_related("food_category").all()
     serializer_class = FoodItemSerializer
     filterset_fields = ["food_category"]
 
 
+@extend_schema(tags=["Lookups"])
 class FacilityViewSet(LookupViewSet):
     queryset = Facility.objects.all()
     serializer_class = FacilitySerializer
 
 
+@extend_schema(tags=["Lookups"])
 class HygieneTagViewSet(LookupViewSet):
     queryset = HygieneTag.objects.all()
     serializer_class = HygieneTagSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class RatingTypeViewSet(LookupViewSet):
     queryset = RatingType.objects.all()
     serializer_class = RatingTypeSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class MediaTypeViewSet(LookupViewSet):
     queryset = MediaType.objects.all()
     serializer_class = MediaTypeSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class LicenseTypeViewSet(LookupViewSet):
     queryset = LicenseType.objects.all()
     serializer_class = LicenseTypeSerializer
 
 
+@extend_schema(tags=["Lookups"])
 class ReviewCategoryViewSet(LookupViewSet):
     queryset = ReviewCategory.objects.all()
     serializer_class = ReviewCategorySerializer

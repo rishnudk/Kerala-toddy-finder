@@ -21,6 +21,8 @@ class EnforceStandardResponseMiddleware:
             settings.DEBUG
             and hasattr(response, "data")
             and request.path.startswith("/api/")
+            and not request.path.startswith("/api/schema/")
+            and not request.path.startswith("/api/docs/")
         ):
             # It's an API Response. Let's inspect it.
             data = getattr(response, "data", {})
