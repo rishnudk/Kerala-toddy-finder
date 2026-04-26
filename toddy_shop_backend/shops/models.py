@@ -1,6 +1,8 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from shared.models import TimeStampMixin
+
 from core.models import (
     Facility,
     FoodItem,
@@ -16,7 +18,7 @@ from core.models import (
 )
 
 
-class ToddyShop(models.Model):
+class ToddyShop(TimeStampMixin):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shops")
@@ -31,8 +33,6 @@ class ToddyShop(models.Model):
     status = models.ForeignKey(Status, on_delete=models.PROTECT, related_name="shops")
     facilities = models.ManyToManyField(Facility, blank=True, related_name="shops")
     hygiene_tags = models.ManyToManyField(HygieneTag, blank=True, related_name="shops")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "toddy_shops"
@@ -105,7 +105,7 @@ class ShopMedia(models.Model):
         return f"{self.shop.name} – {self.media_type.name}"
 
 
-class ShopReview(models.Model):
+class ShopReview(TimeStampMixin):
     shop = models.ForeignKey(
         ToddyShop, on_delete=models.CASCADE, related_name="reviews"
     )
@@ -114,8 +114,6 @@ class ShopReview(models.Model):
     title = models.CharField(max_length=200, blank=True)
     body = models.TextField()
     status = models.ForeignKey(Status, on_delete=models.PROTECT, related_name="reviews")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "shop_reviews"
