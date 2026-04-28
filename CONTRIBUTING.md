@@ -44,7 +44,7 @@ Thank you for your interest in contributing to the Kerala Toddy Finder project! 
 ### Node.js Frontend
 1. Navigate to the frontend directory:
    ```bash
-   cd frontend
+   cd toddy_shop_frontend
    ```
 2. Install dependencies:
    ```bash
@@ -56,8 +56,14 @@ Thank you for your interest in contributing to the Kerala Toddy Finder project! 
    ```
 
 ## Code Standards
-- Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) for Python code.
-- Use [Prettier](https://prettier.io/) for formatting JavaScript files.
+- **Python**: Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/). We use `flake8` for linting and `pre-commit` hooks to ensure standards are met before committing.
+- **JavaScript/TypeScript**: Use [Prettier](https://prettier.io/) for code formatting.
+
+## Dependency Management & Dependabot
+To ensure our dependencies remain secure and up to date, this project utilizes **Dependabot**.
+- **Automated Updates**: Dependabot runs weekly to check for updates in `github-actions`, `toddy_shop_backend` (Python/uv), and `toddy_shop_frontend` (Node/npm).
+- **Grouped Pull Requests**: To minimize PR noise, Dependabot is configured to group updates by ecosystem (e.g., all frontend dependencies will be bundled into a single PR).
+- **Review Process**: When reviewing Dependabot PRs, please ensure that CI checks pass and there are no breaking changes before merging.
 
 ## Pull Request Process
 1. Fork the repository.
