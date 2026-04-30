@@ -179,9 +179,7 @@ class DistrictViewSet(LookupViewSet):
                 "id": d.id,
                 "name": d.name,
                 "shop_count": d.shop_count,
-                "avg_rating": (
-                    round(d.avg_rating, 1) if d.avg_rating is not None else None
-                ),
+                "avg_rating": (round(d.avg_rating, 1) if d.avg_rating is not None else None),
             }
             for d in districts
         ]
