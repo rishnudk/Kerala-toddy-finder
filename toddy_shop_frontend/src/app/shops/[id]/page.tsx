@@ -1,24 +1,39 @@
-export default async function ShopDetail({
+import { SHOP_DETAILS } from "@/features/shops/data";
+import { ShopDetailPage, ShopNotFound } from "@/features/shops/components/ShopDetailPage";
+
+export async function generateStaticParams() {
+  return SHOP_DETAILS.map((shop) => ({ id: shop.id }));
+}
+
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const shop = SHOP_DETAILS.find((s) => s.id === id);
 
-  return (
-    <div className="max-w-7xl mx-auto py-20 px-8">
-      <div className="text-center">
-        <span className="material-symbols-outlined text-6xl text-primary mb-4">
-          storefront
-        </span>
-        <h1 className="font-[family-name:var(--font-heading)] text-4xl text-primary font-semibold mb-4">
-          Shop: {id}
-        </h1>
-        <p className="text-stone-600 text-lg">
-          Detailed shop page coming soon. This will show menus, reviews, photos,
-          and directions.
-        </p>
-      </div>
-    </div>
-  );
+  if (!shop) {
+    return { title: "Shop Not Found | Shaap" };
+  }
+
+  return {
+    title: `${shop.name} — ${shop.district} | Shaap`,
+    description: shop.tagline,
+  };
+}
+
+export default async function ShopDetailRoute({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const shop = SHOP_DETAILS.find((s) => s.id === id);
+
+  if (!shop) {
+    return <ShopNotFound id={id} />;
+  }
+
+  return <ShopDetailPage shop={shop} />;
 }
