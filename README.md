@@ -250,6 +250,33 @@ MIT License
 
 ---
 
+## 👥 Contributors
+
+<p align="center">
+  <a href="https://github.com/keralacoderscafe/kerala-toddy-finder/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=keralacoderscafe/kerala-toddy-finder" width="600"/>
+  </a>
+</p>
+
+<p align="center">
+  Made with ❤️ using <a href="https://contrib.rocks">contrib.rocks</a>
+</p>
+
+---
+
+## ⭐ Star History
+
+<p align="center">
+  <a href="https://www.star-history.com/#KERALACODERSCAFE/Kerala-toddy-finder&Date">
+    <img 
+      src="https://api.star-history.com/svg?repos=KERALACODERSCAFE/Kerala-toddy-finder&type=Date" 
+      width="500"
+    />
+  </a>
+</p>
+
+---
+
 ## 🙌 Acknowledgements
 
 Thanks to all contributors building this platform together 🚀
