@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface Shop {
   id: string;
@@ -26,7 +27,12 @@ export function ShopCard({ shop }: { shop: Shop }) {
         />
         {shop.badge && (
           <div
-            className={`absolute top-4 right-4 ${shop.badgeColor} text-white px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider`}
+            className={cn(
+              "absolute top-4 right-4",
+              "text-white px-3 py-1 rounded-full",
+              "text-[10px] font-bold flex items-center gap-1 uppercase tracking-wider",
+              shop.badgeColor
+            )}
           >
             {shop.badge === "Hygiene Verified" && (
               <span
@@ -49,10 +55,10 @@ export function ShopCard({ shop }: { shop: Shop }) {
         </div>
         <p className="text-stone-500 text-sm mb-4">{shop.district}</p>
         <div className="flex flex-wrap gap-2 mb-6">
-          <span className="leaf-chip bg-secondary/10 text-secondary px-3 py-1 text-[11px] font-bold">
+          <span className={cn("leaf-chip px-3 py-1 text-[11px] font-bold", "bg-secondary/10 text-secondary")}>
             {shop.district.toUpperCase()}
           </span>
-          <span className="leaf-chip bg-primary/5 text-primary px-3 py-1 text-[11px] font-bold">
+          <span className={cn("leaf-chip px-3 py-1 text-[11px] font-bold", "bg-primary/5 text-primary")}>
             {shop.tag}
           </span>
         </div>
