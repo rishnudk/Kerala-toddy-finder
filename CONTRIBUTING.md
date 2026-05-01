@@ -9,37 +9,30 @@ Thank you for your interest in contributing to the Kerala Toddy Finder project! 
 - npm 6.x or higher
 
 ## Setup Instructions
-### Django Backend
+### Django Backend (Docker-First Setup)
+The backend uses **Docker** and **PostGIS** to handle geographical data correctly across all platforms without requiring complex local C-library installations.
+
 1. Clone the repository:
    ```bash
    git clone https://github.com/KERALACODERSCAFE/Kerala-toddy-finder.git
-   cd Kerala-toddy-finder/toddy_shop_backend
+   cd Kerala-toddy-finder
    ```
 
-2. Install UV:
-   Install uv based on your platform by following the instructions here: https://docs.astral.sh/uv/getting-started/installation
-
-3. Create a virtual environment:
+2. Start the Docker environment:
+   This will build the Python image (with GDAL/GEOS) and spin up the PostGIS database.
    ```bash
-   uv venv
+   docker-compose up -d --build
    ```
 
-4. Activate the virtual environment:
+3. Run Migrations:
+   Execute commands inside the `web` container.
    ```bash
-   source .venv/bin/activate  # macOS/Linux
-
-   # On Windows use `.venv\Scripts\activate`
+   docker-compose exec web uv run python manage.py migrate
    ```
 
-5. Install dependencies:
-   ```bash
-   uv sync
-   ```
+4. The API will now be available at `http://localhost:8000`.
 
-6. Run the development server:
-   ```bash
-   uv run python manage.py runserver
-   ```
+*Note: If you need to add dependencies, run `docker-compose exec web uv add <package>` and it will automatically update `pyproject.toml` and `uv.lock`.*
 
 ### Node.js Frontend
 1. Navigate to the frontend directory:
