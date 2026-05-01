@@ -15,10 +15,10 @@ services:
       timeout: 5s
       retries: 15
 
-  web:
+  backend:
     build:
       context: ./toddy_shop_backend
-    container_name: toddy_finder_web
+    container_name: toddy_finder_backend
     command: uv run python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./toddy_shop_backend:/app

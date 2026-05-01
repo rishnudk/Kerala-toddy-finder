@@ -25,14 +25,14 @@ The backend uses **Docker** and **PostGIS** to handle geographical data correctl
    ```
 
 3. Run Migrations:
-   Execute commands inside the `web` container.
+   Execute commands inside the `backend` container.
    ```bash
-   docker-compose exec web uv run python manage.py migrate
+   docker-compose exec backend uv run python manage.py migrate
    ```
 
 4. The API will now be available at `http://localhost:8000`.
 
-*Note: If you need to add dependencies, run `docker-compose exec web uv add <package>` and it will automatically update `pyproject.toml` and `uv.lock`.*
+*Note: If you need to add dependencies, run `docker-compose exec backend uv add <package>` and it will automatically update `pyproject.toml` and `uv.lock`.*
 
 ### Node.js Frontend
 1. Navigate to the frontend directory:
