@@ -20,6 +20,11 @@ jobs:
         python-version: "3.12"
         cache: 'pip'
         
+    - name: Install System Dependencies (GDAL/GEOS)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends gdal-bin binutils libproj-dev gcc
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
