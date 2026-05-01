@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
     "drf_spectacular",
+    "import_export",
 ]
 
 SELF_APPS = [
