@@ -1,6 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
+  const pathname = usePathname();
+
+  const getLinkClasses = (path: string) => {
+    const isActive = pathname === path;
+    if (isActive) {
+      return "text-primary-container font-bold border-b-2 border-primary-container pb-1 font-[family-name:var(--font-heading)]";
+    }
+    return "text-stone-600 font-medium hover:text-primary-container transition-all duration-300 font-[family-name:var(--font-heading)]";
+  };
+
   return (
     <header className="bg-cream border-b border-cream-border sticky top-0 z-50">
       <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
@@ -13,19 +26,19 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-x-8">
           <Link
             href="/"
-            className="text-primary-container font-bold border-b-2 border-primary-container pb-1 font-[family-name:var(--font-heading)]"
+            className={getLinkClasses("/")}
           >
             Discover
           </Link>
           <Link
             href="/explore"
-            className="text-stone-600 font-medium hover:text-primary-container transition-all duration-300 font-[family-name:var(--font-heading)]"
+            className={getLinkClasses("/explore")}
           >
             Explore
           </Link>
           <Link
             href="/community"
-            className="text-stone-600 font-medium hover:text-primary-container transition-all duration-300 font-[family-name:var(--font-heading)]"
+            className={getLinkClasses("/community")}
           >
             Community
           </Link>
