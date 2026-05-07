@@ -28,7 +28,7 @@ export function HeroSection() {
       <div className="relative z-10 mx-auto w-full max-w-[1240px]">
         <div className="max-w-[620px]">
           <span className="mb-5 inline-flex rounded-full border border-white/20 bg-white/95 px-3 py-1 text-[12px] font-bold tracking-[0.14em] text-emerald-900 shadow-sm sm:mb-6 sm:px-4 sm:py-1.5 sm:text-[11px]">
-          God's Own Country
+          God&apos;s Own Country
           </span>
 
           <h1 className="font-[family-name:var(--font-body)] text-[34px] font-extrabold leading-[1.12] drop-shadow-sm sm:text-[42px] md:text-[52px]">
