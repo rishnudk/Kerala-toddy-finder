@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, Search, User, X } from "lucide-react";
 import Image from "next/image";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      <header className="absolute left-0 top-0 z-30 w-full">
+      <header 
+        className={`fixed left-0 top-0 z-30 w-full transition-all duration-300 ${
+          isScrolled 
+            ? "bg-black/40 backdrop-blur-md border-b border-white/10" 
+            : "bg-transparent border-b border-transparent"
+        }`}
+      >
         <nav className="mx-auto flex h-[72px] w-full max-w-[1280px] items-center justify-between px-4 text-white sm:px-6 lg:px-8">
           <button
             onClick={() => setMobileMenuOpen(true)}
