@@ -1,62 +1,67 @@
 "use client";
 
 import Image from "next/image";
+import { Search } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[700px] lg:min-h-[85vh] flex items-center text-white overflow-hidden py-20 px-8">
-      {/* Kerala background image */}
+    <section className="relative flex min-h-[640px] items-center overflow-hidden px-4 pb-10 pt-28 text-white sm:min-h-[720px] sm:px-6 sm:pt-32 lg:min-h-[840px] lg:px-10">
       <Image
-        src="/kerala-hero.png"
-        alt="Kerala backwaters at golden hour"
+        src="/hero-bg-mobile.jpg"
+        alt="Aerial view of Kerala landscape"
         fill
         priority
-        className="object-cover object-center"
+        className="object-cover object-center md:hidden"
         sizes="100vw"
       />
-      {/* Dark gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-      <div className="absolute inset-0 bg-[#003e1c]/30 mix-blend-multiply" />
+      <Image
+        src="/hero-bg.jpg"
+        alt="Aerial view of Kerala landscape"
+        fill
+        priority
+        className="hidden object-cover object-center md:block"
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/35 md:from-black/60 md:via-black/30 md:to-black/45" />
+      <div className="absolute inset-0 bg-[#022612]/40" />
 
-      <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="max-w-3xl flex flex-col justify-center mt-12">
-          <div className="inline-flex bg-white text-stone-800 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest w-fit mb-8 shadow-sm">
-            KERALA&apos;S BEST
-          </div>
-          
-          <h1 className="font-[family-name:var(--font-heading)] text-[clamp(48px,6vw,84px)] leading-[1.05] mb-6 font-semibold text-white drop-shadow-md">
-            Discover Authentic <br />
-            Toddy Shops Across <span className="text-[#a5dff0] drop-shadow-none">Kerala.</span>
+      <div className="relative z-10 mx-auto w-full max-w-[1240px]">
+        <div className="max-w-[620px]">
+          <span className="mb-5 inline-flex rounded-full border border-white/20 bg-white/95 px-3 py-1 text-[12px] font-bold tracking-[0.14em] text-emerald-900 shadow-sm sm:mb-6 sm:px-4 sm:py-1.5 sm:text-[11px]">
+          God&apos;s Own Country
+          </span>
+
+          <h1 className="font-[family-name:var(--font-body)] text-[34px] font-extrabold leading-[1.12] drop-shadow-sm sm:text-[42px] md:text-[52px]">
+            Discover Authentic
+            <br />
+            Toddy Shops Across
+            <br />
+            Kerala.
           </h1>
-          
-          <h2 className="text-[22px] md:text-[26px] font-bold mb-5 font-malayalam drop-shadow-md text-[#ffb148] leading-snug">
-            കേരളത്തിലെ മികച്ച കള്ളുഷാപ്പുകൾ <br/> കണ്ടെത്താം എളുപ്പത്തിൽ.
-          </h2>
-          
-          <p className="text-white/90 mb-10 text-[17px] max-w-[480px] leading-relaxed drop-shadow-sm font-medium">
-            Find the best toddy shops near you — <br/> verified, rated, and loved by the community.
+
+          <p className="mt-3 max-w-[460px] text-sm font-semibold text-white/90 sm:text-base">
+            കേരളത്തിലെ മികച്ച കള്ളുഷാപ്പുകൾ എളുപ്പത്തിൽ കണ്ടെത്താം.
           </p>
 
-          {/* Simple Search Bar */}
-          <div className="bg-white rounded-[14px] p-[6px] shadow-2xl flex items-center w-full max-w-md text-stone-800 border-[3px] border-white/20 backdrop-blur-sm bg-clip-padding">
-            <span className="material-symbols-outlined text-stone-400 ml-4 mr-3 text-[22px]">search</span>
+          <p className="mt-2 max-w-[500px] text-xs text-white/80 sm:text-sm">
+            Find trusted, local toddy spots near you.
+          </p>
+
+          <div className="mt-6 flex w-full max-w-[420px] items-center rounded-lg border border-white/20 bg-white p-1.5 shadow-xl sm:mt-7">
+            <Search size={17} className="mx-2 shrink-0 text-zinc-400" />
             <input
-              className="flex-1 border-none focus:ring-0 p-0 text-[15px] font-medium placeholder-stone-400 bg-transparent outline-none py-[14px]"
-              placeholder="Search for shop, places..."
               type="text"
+              placeholder="Search for shop, places..."
+              className="h-9 w-full bg-transparent pr-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none"
             />
-            <button className="bg-primary hover:bg-primary/90 text-white w-12 h-12 rounded-[10px] flex items-center justify-center transition-all cursor-pointer shadow-md">
-              <span className="material-symbols-outlined text-xl">search</span>
+            <button
+              className="flex h-9 w-9 items-center justify-center rounded-md bg-emerald-700 text-white transition hover:bg-emerald-600"
+              aria-label="Search toddy shops"
+            >
+              <Search size={15} />
             </button>
           </div>
         </div>
-      </div>
-
-      <div className="absolute bottom-8 right-8 z-10">
-        <button className="bg-white text-stone-800 px-4 py-2 rounded-lg font-bold text-[13px] flex items-center gap-2 shadow-lg hover:bg-stone-50 transition-colors">
-          <span className="material-symbols-outlined text-primary text-[18px]">location_on</span>
-          Search Area
-        </button>
       </div>
     </section>
   );
