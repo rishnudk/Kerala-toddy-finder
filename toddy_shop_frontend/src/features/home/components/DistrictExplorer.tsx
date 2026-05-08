@@ -20,15 +20,13 @@ export function DistrictExplorer() {
     const ITEMS_PER_PAGE = 7;
     const totalPages = Math.ceil(DISTRICTS.length / ITEMS_PER_PAGE);
 
-    // Automatically switch page if active district changes from map click
-    useEffect(() => {
-        if (activeDistrict) {
-            const districtIndex = DISTRICTS.indexOf(activeDistrict);
-            if (districtIndex !== -1) {
-                setPage(Math.floor(districtIndex / ITEMS_PER_PAGE));
-            }
+    const handleMapClick = (districtName: string) => {
+        setActiveDistrict(districtName);
+        const districtIndex = DISTRICTS.indexOf(districtName);
+        if (districtIndex !== -1) {
+            setPage(Math.floor(districtIndex / ITEMS_PER_PAGE));
         }
-    }, [activeDistrict]);
+    };
 
     const paginatedDistricts = DISTRICTS.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
@@ -54,7 +52,7 @@ export function DistrictExplorer() {
                                     d={district.d}
                                     strokeWidth="2"
                                     className={`transition-all duration-300 cursor-pointer ${isActive ? 'fill-[#003e1c] stroke-[#003e1c]' : 'fill-white stroke-stone-200 hover:fill-sky-50 hover:stroke-sky-300'}`}
-                                    onClick={() => setActiveDistrict(district.name)}
+                                    onClick={() => handleMapClick(district.name)}
                                     onMouseEnter={() => setHoveredDistrict(district.name)}
                                     onMouseLeave={() => setHoveredDistrict(null)}
                                     onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
