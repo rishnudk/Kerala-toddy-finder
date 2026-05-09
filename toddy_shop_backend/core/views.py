@@ -1,4 +1,6 @@
+from django.db.models import Avg, Count, Q
 from rest_framework import generics, permissions, viewsets
+from rest_framework.decorators import action
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from drf_spectacular.utils import extend_schema
@@ -120,9 +122,7 @@ class LookupViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return APIResponse(
-            data=serializer.data, message="Created successfully.", status=201
-        )
+        return APIResponse(data=serializer.data, message="Created successfully.", status=201)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -158,6 +158,32 @@ class StatusViewSet(LookupViewSet):
 class DistrictViewSet(LookupViewSet):
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
+
+    @action(detail=False, methods=["get"], permission_classes=[permissions.AllowAny])
+    def stats(self, request):
+        active_filter = Q(places__toddyshops__status__name="Active")
+        districts = District.objects.annotate(
+            shop_count=Count(
+                "places__toddyshops",
+                filter=active_filter,
+                distinct=True,
+            ),
+            avg_rating=Avg(
+                "places__toddyshops__ratings__score",
+                filter=active_filter,
+            ),
+        ).order_by("-shop_count", "name")
+
+        data = [
+            {
+                "id": d.id,
+                "name": d.name,
+                "shop_count": d.shop_count,
+                "avg_rating": (round(d.avg_rating, 1) if d.avg_rating is not None else None),
+            }
+            for d in districts
+        ]
+        return APIResponse(data=data, message="District statistics retrieved.")
 
 
 @extend_schema(tags=["Lookups"])

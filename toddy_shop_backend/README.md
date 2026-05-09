@@ -49,6 +49,20 @@ Apply migrations:
 uv run python manage.py migrate
 ```
 
+
+Load the initial fixture data to populate required lookup and master tables:
+```bash
+uv run python manage.py loaddata core/fixtures/initial_data.json
+```
+This Ensures the following database has essential default data
+
+
+Or You can run one line command 
+
+```bash
+uv run python manage.py migrate && uv run python manage.py loaddata core/fixtures/initial_data.json
+```
+
 Start development server:
 
 ```bash

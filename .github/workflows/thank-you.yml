@@ -1,0 +1,37 @@
+name: Say thanks to contributors
+
+on:
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  if_merged:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Add thank you note
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            const users = [
+              `@${pr.user.login}`,
+              ...pr.assignees.map(a => `@${a.login}`)
+            ];
+
+            const tagged_users = [...new Set(users)].join(" ");
+
+            const thankyou_note = 'Your contribution makes Toddy Finder better for everyone! :sparkles: We appreciate your time and dedication keep building and sharing your ideas! :speech_balloon: Your impact matters! :raised_hands:';
+
+            await github.rest.issues.createComment({
+              issue_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${tagged_users} ${thankyou_note}`
+            });

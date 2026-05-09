@@ -24,11 +24,7 @@ def custom_exception_handler(exc, context):
         # Unhandled exception
         logger.error(f"Unhandled Exception: {exc}", exc_info=True)
         if isinstance(exc, DjangoValidationError):
-            data = (
-                exc.message_dict
-                if hasattr(exc, "message_dict")
-                else {"error": list(exc)}
-            )
+            data = exc.message_dict if hasattr(exc, "message_dict") else {"error": list(exc)}
             return _create_error_response("Validation Error", 400, data)
         elif isinstance(exc, Http404):
             return _create_error_response("Not Found", 404, None)
@@ -57,6 +53,4 @@ def _get_error_message(data):
 def _create_error_response(message, status_code, data):
     from rest_framework.response import Response
 
-    return Response(
-        {"status": "error", "message": message, "data": data}, status=status_code
-    )
+    return Response({"status": "error", "message": message, "data": data}, status=status_code)

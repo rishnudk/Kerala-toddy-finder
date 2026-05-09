@@ -22,6 +22,4 @@ class IsAdminOrReadOnly(BasePermission):
 
 class IsShopOwnerOrAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and (
-            request.user.is_shop_owner or request.user.is_admin
-        )
+        return request.user.is_authenticated and (request.user.is_shop_owner or request.user.is_admin)
