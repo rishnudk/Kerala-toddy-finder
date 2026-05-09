@@ -1,9 +1,9 @@
 from django.db.models import Avg, Count, Q
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from drf_spectacular.utils import extend_schema
 
 from shared.permissions import IsAdminOrReadOnly
 from shared.responses import APIResponse
@@ -71,7 +71,7 @@ class LoginView(TokenObtainPairView):
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as exc:
-            raise InvalidToken(exc.args[0])
+            raise InvalidToken(exc.args[0]) from exc
         return APIResponse(data=serializer.validated_data, message="Login successful.")
 
 
@@ -82,7 +82,7 @@ class TokenRefreshAPIView(TokenRefreshView):
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as exc:
-            raise InvalidToken(exc.args[0])
+            raise InvalidToken(exc.args[0]) from exc
         return APIResponse(data=serializer.validated_data, message="Token refreshed.")
 
 

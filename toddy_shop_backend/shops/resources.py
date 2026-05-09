@@ -1,10 +1,12 @@
 import logging
-from django.db import transaction
-from import_export import resources, fields
-from django.core.exceptions import ValidationError
 
-from .models import ToddyShop, ShopLicense, ShopFoodItem
-from core.models import User, District, Place, Facility, HygieneTag, FoodItem, LicenseType, Status, ShopCategory
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from import_export import fields, resources
+
+from core.models import District, Facility, FoodItem, HygieneTag, LicenseType, Place, ShopCategory, Status, User
+
+from .models import ShopFoodItem, ShopLicense, ToddyShop
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +86,7 @@ class ToddyShopResource(resources.ModelResource):
 
         except Exception as e:
             logger.error(f"[FK ERROR] {e}")
-            raise ValidationError(str(e))
+            raise ValidationError(str(e)) from e
 
         row["owner"] = owner.id
         row["place"] = place.id

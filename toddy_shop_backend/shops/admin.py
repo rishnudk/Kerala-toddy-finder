@@ -1,4 +1,8 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+
+from core.models import District, Place
+
 from .models import (
     ShopFoodItem,
     ShopLicense,
@@ -7,9 +11,7 @@ from .models import (
     ShopReview,
     ToddyShop,
 )
-from core.models import District, Place
 from .resources import ToddyShopResource
-from import_export.admin import ImportExportModelAdmin
 
 
 class ShopLicenseInline(admin.StackedInline):
