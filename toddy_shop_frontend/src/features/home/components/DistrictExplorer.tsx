@@ -2,15 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import keralaPaths from "./kerala-paths.json";
 
-const DISTRICTS = [
-    "Kasaragod",
-    "Kannur",
-    "Wayanad",
-    "Kozhikode",
-    "Malappuram",
-    "Palakkad",
-];
+const DISTRICTS = keralaPaths.map(p => p.name).sort();
 
 const MOCK_SHOPS = [
     { id: 1, title: "Heritage", rating: "4.2", tags: "Family Dining" },
@@ -19,44 +13,70 @@ const MOCK_SHOPS = [
 ];
 
 export function DistrictExplorer() {
-    const [activeDistrict, setActiveDistrict] = useState("Kasaragod");
+    const [activeDistrict, setActiveDistrict] = useState("Alappuzha");
+    const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [page, setPage] = useState(0);
+    const ITEMS_PER_PAGE = 7;
+    const totalPages = Math.ceil(DISTRICTS.length / ITEMS_PER_PAGE);
+
+    const handleMapClick = (districtName: string) => {
+        setActiveDistrict(districtName);
+        const districtIndex = DISTRICTS.indexOf(districtName);
+        if (districtIndex !== -1) {
+            setPage(Math.floor(districtIndex / ITEMS_PER_PAGE));
+        }
+    };
+
+    const paginatedDistricts = DISTRICTS.slice(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE);
 
     return (
         <section className="bg-white py-24 px-8 border-b border-stone-100">
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-24">
                 {/* Left Side: Map graphic */}
-                <div className="w-full lg:w-1/3 flex items-center justify-center lg:justify-start relative min-h-[400px]">
+                <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-start relative min-h-[600px]">
                     {/* Abstract stylized Kerala map representation */}
                     <svg
                         viewBox="0 0 400 800"
-                        className="w-[80%] h-auto max-h-[600px] drop-shadow-xl"
+                        className="w-[90%] h-auto max-h-[800px] drop-shadow-xl"
                         fill="none"
                         stroke="#e5e7eb"
                         strokeWidth="2"
                     >
-                        {/* Outline */}
-                        <path
-                            d="M120,50 L180,80 L160,150 L190,250 L220,350 L250,450 L300,600 L320,700 L280,750 L220,700 L180,600 L140,500 L100,400 L80,250 L90,150 Z"
-                            fill="#ffffff"
-                        />
-                        {/* Highlighted Kasaragod region (top part) */}
-                        <path
-                            d="M120,50 L180,80 L160,150 L90,150 Z"
-                            fill="#003e1c"
-                            stroke="#003e1c"
-                            strokeWidth="2"
-                            className="transition-all duration-500"
-                        />
+                        {/* Render all districts as clickable paths */}
+                        {keralaPaths.map((district) => {
+                            const isActive = activeDistrict === district.name;
+                            return (
+                                <path
+                                    key={district.name}
+                                    d={district.d}
+                                    strokeWidth="2"
+                                    className={`transition-all duration-300 cursor-pointer ${isActive ? 'fill-[#003e1c] stroke-[#003e1c]' : 'fill-white stroke-stone-200 hover:fill-sky-50 hover:stroke-sky-300'}`}
+                                    onClick={() => handleMapClick(district.name)}
+                                    onMouseEnter={() => setHoveredDistrict(district.name)}
+                                    onMouseLeave={() => setHoveredDistrict(null)}
+                                    onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+                                />
+                            );
+                        })}
                     </svg>
 
-                    <div className="absolute top-10 right-10 bg-white p-4 rounded-xl shadow-lg border border-stone-100 flex flex-col items-center">
-                        <span className="font-bold text-stone-800 tracking-wide">
-                            {activeDistrict}
-                        </span>
-                        <span className="text-xs text-stone-500 font-medium mt-1">
-                            12 Top Rating • 150 Shops
-                        </span>
-                    </div>
+                    {/* Hover Tooltip */}
+                    {hoveredDistrict && (
+                        <div 
+                            className="fixed z-50 pointer-events-none bg-white px-4 py-3 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border-2 border-sky-500 flex flex-col items-center transform -translate-x-1/2 -translate-y-full transition-opacity duration-200"
+                            style={{ left: mousePos.x, top: mousePos.y - 20 }}
+                        >
+                            <span className="font-bold text-sky-600 tracking-wide text-sm uppercase">
+                                {hoveredDistrict}
+                            </span>
+                            <span className="text-xs font-bold mt-1 px-2 py-1 bg-sky-50 text-sky-500 rounded-md">
+                                150 Shops
+                            </span>
+                            {/* Tooltip Arrow */}
+                            <div className="absolute bottom-[-6.5px] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-white border-b-2 border-r-2 border-sky-500 rotate-45"></div>
+                        </div>
+                    )}
 
                     <div className="absolute bottom-10 left-0 bg-white shadow-md border border-stone-100 rounded-lg flex flex-col">
                         <button className="w-10 h-10 border-b border-stone-100 flex items-center justify-center text-stone-600 hover:text-primary transition-colors">
@@ -73,7 +93,7 @@ export function DistrictExplorer() {
                 </div>
 
                 {/* Right Side: Districts List */}
-                <div className="w-full lg:w-2/3 flex flex-col">
+                <div className="w-full lg:w-1/2 flex flex-col">
                     <div className="mb-10">
                         <h2 className="font-[family-name:var(--font-heading)] text-5xl font-semibold text-on-surface mb-3">
                             Explore by{" "}
@@ -85,12 +105,12 @@ export function DistrictExplorer() {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        {DISTRICTS.map((district) => {
+                        {paginatedDistricts.map((district) => {
                             const isActive = activeDistrict === district;
                             return (
                                 <div
                                     key={district}
-                                    className={`grid transition-[grid-template-rows,background-color,border-color,box-shadow] duration-300 ease-in-out border border-stone-200 rounded-2xl overflow-hidden ${isActive ? "grid-rows-[auto_1fr] bg-stone-50 shadow-sm" : "grid-rows-[auto_0fr] bg-white hover:border-stone-300"}`}
+                                    className={`flex flex-col transition-colors duration-300 ease-in-out border border-stone-200 rounded-2xl overflow-hidden ${isActive ? "bg-stone-50 shadow-sm border-primary/20" : "bg-white hover:border-stone-300"}`}
                                 >
                                     {/* Accordion Header */}
                                     <div
@@ -123,7 +143,7 @@ export function DistrictExplorer() {
 
                                     {/* Expanded Content (Cards) */}
                                     <div
-                                        className={`px-6 min-h-0 overflow-hidden transition-all duration-300 ease-in-out ${isActive ? "pb-6 opacity-100" : "pb-0 opacity-0"}`}
+                                        className={`px-6 overflow-hidden transition-all duration-500 ease-in-out ${isActive ? "max-h-[500px] pb-6 opacity-100" : "max-h-0 pb-0 opacity-0"}`}
                                     >
                                         <div className="flex gap-4 overflow-x-auto pb-4 pt-2 snap-x hide-scrollbar ">
                                             {MOCK_SHOPS.map((shop) => (
@@ -181,6 +201,33 @@ export function DistrictExplorer() {
                             );
                         })}
                     </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                        <div className="flex items-center justify-between mt-6 pt-6 border-t border-stone-100">
+                            <span className="text-sm text-stone-500 font-medium">
+                                Showing {page * ITEMS_PER_PAGE + 1} to {Math.min((page + 1) * ITEMS_PER_PAGE, DISTRICTS.length)} of {DISTRICTS.length} Districts
+                            </span>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setPage(p => Math.max(0, p - 1))}
+                                    disabled={page === 0}
+                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${page === 0 ? 'bg-stone-50 text-stone-300 cursor-not-allowed' : 'bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-primary'}`}
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                                    Previous
+                                </button>
+                                <button
+                                    onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                                    disabled={page === totalPages - 1}
+                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${page === totalPages - 1 ? 'bg-stone-50 text-stone-300 cursor-not-allowed' : 'bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-primary'}`}
+                                >
+                                    Next
+                                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
