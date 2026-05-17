@@ -1,6 +1,7 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -16,20 +17,57 @@ L.Icon.Default.mergeOptions({
     "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-const toddyShops = [
-  {
-    id: 1,
-    name: "Heritage",
-    position: [9.4981, 76.3388],
-  },
-  {
-    id: 2,
-    name: "Kochi Toddy",
-    position: [9.9312, 76.2673],
-  },
-];
+interface Shop {
+  id: number;
+  name: string;
+  locationName: string;
+  position: [number, number];
+  description: string;
+  rating: number;
+  specialty: string;
+}
 
-export default function MapView() {
+interface MapViewProps {
+  shops: Shop[];
+  activeCenter: [number, number] | null;
+  activeShopId: number | null;
+  onMarkerClick: (shopId: number) => void;
+}
+
+// Custom hook helper to fly to active center smoothly
+function MapViewHandler({ activeCenter }: { activeCenter: [number, number] | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (activeCenter) {
+      map.flyTo(activeCenter, 14, {
+        duration: 1.5,
+        easeLinearity: 0.25,
+      });
+    }
+  }, [activeCenter, map]);
+
+  return null;
+}
+
+export default function MapView({
+  shops,
+  activeCenter,
+  activeShopId,
+  onMarkerClick,
+}: MapViewProps) {
+  const markerRefs = useRef<{ [key: number]: L.Marker | null }>({});
+
+  useEffect(() => {
+    if (activeShopId && markerRefs.current[activeShopId]) {
+      // Short delay to allow map to fly or complete layout rendering
+      const timer = setTimeout(() => {
+        markerRefs.current[activeShopId]?.openPopup();
+      }, 350);
+      return () => clearTimeout(timer);
+    }
+  }, [activeShopId]);
+
   return (
     <MapContainer
       center={[9.9312, 76.2673]}
@@ -38,16 +76,46 @@ export default function MapView() {
       className="h-full w-full"
     >
       <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {toddyShops.map((shop) => (
+      <MapViewHandler activeCenter={activeCenter} />
+
+      {shops.map((shop) => (
         <Marker
           key={shop.id}
-          position={shop.position as [number, number]}
+          position={shop.position}
+          ref={(el) => {
+            markerRefs.current[shop.id] = el;
+          }}
+          eventHandlers={{
+            click: () => {
+              onMarkerClick(shop.id);
+            },
+          }}
         >
-          <Popup>{shop.name}</Popup>
+          <Popup className="custom-popup">
+            <div className="p-1 max-w-[220px]">
+              <h3 className="font-bold text-sm text-[#003e1c] font-heading leading-tight">
+                {shop.name}
+              </h3>
+              <p className="text-[10px] text-slate-500 font-medium mt-0.5">
+                📍 {shop.locationName}
+              </p>
+              <p className="text-xs text-slate-600 mt-2 leading-snug">
+                {shop.description}
+              </p>
+              <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">
+                  {shop.specialty}
+                </span>
+                <span className="text-xs font-bold text-emerald-700 flex items-center gap-0.5">
+                  ★ {shop.rating}
+                </span>
+              </div>
+            </div>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>
